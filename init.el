@@ -24,6 +24,8 @@
 (load "~/.emacs.d/pkgs/telephone-line.el")
 (load "~/.emacs.d/pkgs/undo-tree.el")
 (load "~/.emacs.d/pkgs/haskell-mode.el")
+(load "~/.emacs.d/pkgs/haskell-ext.el")
+(load "~/.emacs.d/pkgs/hasklig.el")
 (load "~/.emacs.d/pkgs/org-mode.el")
 (load "~/.emacs.d/pkgs/org-ref.el")
 
