@@ -1,3 +1,5 @@
+;; Set up package 
+(require 'package)
 (setq package-archives
       '(("gnu"         . "http://elpa.gnu.org/packages/")
         ("original"    . "http://tromey.com/elpa/")
@@ -10,8 +12,11 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
+;;
+;; Load packages with their config
+;;
+
 (load "~/.emacs.d/pkgs/keybinds.el")
-(load "~/.emacs.d/pkgs/package.el")
 (load "~/.emacs.d/pkgs/smex.el")
 (load "~/.emacs.d/pkgs/dimmer.el")
 (load "~/.emacs.d/pkgs/company.el")
@@ -22,7 +27,6 @@
 (load "~/.emacs.d/pkgs/undo-tree.el")
 (load "~/.emacs.d/pkgs/haskell-mode.el")
 (load "~/.emacs.d/pkgs/haskell-ext.el")
-(load "~/.emacs.d/pkgs/hasklig.el")
 (load "~/.emacs.d/pkgs/org-mode.el")
 (load "~/.emacs.d/pkgs/org-ref.el")
 
@@ -52,4 +56,5 @@
       browse-url-new-window-flag  t
       browse-url-firefox-new-window-is-tab t)
 
+;; Darktooth <3
 (load-theme 'darktooth t)
