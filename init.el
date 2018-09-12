@@ -12,10 +12,8 @@
 (load custom-file)
 
 (load "~/.emacs.d/pkgs/keybinds.el")
-(load "~/.emacs.d/pkgs/basic-config.el")
 (load "~/.emacs.d/pkgs/package.el")
 (load "~/.emacs.d/pkgs/smex.el")
-(load "~/.emacs.d/pkgs/sublimity.el")
 (load "~/.emacs.d/pkgs/dimmer.el")
 (load "~/.emacs.d/pkgs/company.el")
 (load "~/.emacs.d/pkgs/ido.el")
