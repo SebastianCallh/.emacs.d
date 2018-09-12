@@ -1,0 +1,30 @@
+(setq package-archives
+      '(("gnu"         . "http://elpa.gnu.org/packages/")
+        ("original"    . "http://tromey.com/elpa/")
+        ("org"         . "http://orgmode.org/elpa/")
+        ("marmalade"   . "http://marmalade-repo.org/packages/")
+        ("melpa"       . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+;; Set custom file for output from customize commands
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
+(load "~/.emacs.d/pkgs/keybinds.el")
+(load "~/.emacs.d/pkgs/basic-config.el")
+(load "~/.emacs.d/pkgs/package.el")
+(load "~/.emacs.d/pkgs/smex.el")
+(load "~/.emacs.d/pkgs/sublimity.el")
+(load "~/.emacs.d/pkgs/dimmer.el")
+(load "~/.emacs.d/pkgs/company.el")
+(load "~/.emacs.d/pkgs/ido.el")
+(load "~/.emacs.d/pkgs/magit.el")
+(load "~/.emacs.d/pkgs/projectile.el")
+(load "~/.emacs.d/pkgs/telephone-line.el")
+(load "~/.emacs.d/pkgs/undo-tree.el")
+(load "~/.emacs.d/pkgs/haskell-mode.el")
+(load "~/.emacs.d/pkgs/org-mode.el")
+(load "~/.emacs.d/pkgs/org-ref.el")
+
+(load-theme 'darktooth t)
