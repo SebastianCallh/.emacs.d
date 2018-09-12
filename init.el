@@ -29,4 +29,30 @@
 (load "~/.emacs.d/pkgs/org-mode.el")
 (load "~/.emacs.d/pkgs/org-ref.el")
 
+;;
+;; Ad hoc config below
+;;
+
+(setq inhibit-startup-screen t)
+
+;; Remove clutter
+(menu-bar-no-scroll-bar)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+
+;; UTF-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+;; Wrap words
+(global-visual-line-mode t)
+
+;; Open links in firefox 
+(setq browse-url-browser-function 'browse-url-firefox
+      browse-url-new-window-flag  t
+      browse-url-firefox-new-window-is-tab t)
+
 (load-theme 'darktooth t)
