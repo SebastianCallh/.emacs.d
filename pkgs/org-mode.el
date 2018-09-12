@@ -4,7 +4,7 @@
 (setq org-log-done t)
 
 (setq org-agenda-files (list "~/org/vvp.org"
-                             "~/org/tdde17.org"
+                             "~/org/tdde19.org"
 			     "~/org/master-explorer.org"
 			     "~/org/course-scalpel.org"))
 
