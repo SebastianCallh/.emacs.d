@@ -12,6 +12,8 @@ lisp/
 var/
 url/
 themes/
+secret/
+backups/
 
 ido.last
 bookmarks

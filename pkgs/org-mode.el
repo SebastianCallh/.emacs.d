@@ -3,7 +3,12 @@
       (quote ((sequence "TODO(t)" "|" "ABANDONED(b)" "DONE(d)"))))
 (setq org-log-done t)
 
-(setq org-agenda-files (list "~/org/vvp.org"
+(setq org-agenda-files (list "~/org/cal/schedule.org"
+			     "~/org/cal/spare-time.org"
+			     "~/org/cal/self-study.org"
+			     "~/org/cal/tdde15.org"
+			     "~/org/cal/vvp.org"
+			     "~/org/vvp.org"
                              "~/org/tdde19.org"
 			     "~/org/master-explorer.org"
 			     "~/org/course-scalpel.org"))
@@ -17,6 +22,8 @@
 ;; Org capture
 (setq org-default-notes-file (concat org-directory "/remember.org"))
 (define-key global-map "\C-cr" 'org-capture)
+
+(global-set-key (kbd "C-c a") 'org-agenda)
 
 (require 'org)
 

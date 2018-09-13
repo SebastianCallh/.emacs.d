@@ -30,17 +30,24 @@
 (load "~/.emacs.d/pkgs/haskell-ext.el")
 (load "~/.emacs.d/pkgs/org-mode.el")
 (load "~/.emacs.d/pkgs/org-ref.el")
+(load "~/.emacs.d/pkgs/org-gcal.el")
+;; (load "~/.emacs.d/pkgs/hidden-mode-line.el")
 
 ;;
 ;; Ad hoc config below
 ;;
-
 (setq inhibit-startup-screen t)
+
+;; Do not clutter everything with .file~
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 ;; Remove clutter
 (menu-bar-no-scroll-bar)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
+(set-face-attribute 'vertical-border
+		    nil
+		    :foreground "#282828")
 
 ;; UTF-8
 (prefer-coding-system 'utf-8)
