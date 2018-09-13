@@ -17,7 +17,7 @@
 ;;
 
 (load "~/.emacs.d/pkgs/keybinds.el")
-(load "~/.emacs.d/pkgs/dashboard/dashboard.el")
+(load "~/.emacs.d/pkgs/dashboard.el")
 (load "~/.emacs.d/pkgs/smex.el")
 (load "~/.emacs.d/pkgs/dimmer.el")
 (load "~/.emacs.d/pkgs/company.el")
