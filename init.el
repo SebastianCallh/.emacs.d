@@ -31,7 +31,7 @@
 (load "~/.emacs.d/pkgs/org-mode.el")
 (load "~/.emacs.d/pkgs/org-ref.el")
 (load "~/.emacs.d/pkgs/org-gcal.el")
-;; (load "~/.emacs.d/pkgs/hidden-mode-line.el")
+(load "~/.emacs.d/pkgs/hidden-mode-line.el")
 
 ;;
 ;; Ad hoc config below
@@ -63,6 +63,24 @@
 (setq browse-url-browser-function 'browse-url-firefox
       browse-url-new-window-flag  t
       browse-url-firefox-new-window-is-tab t)
+
+;; Header line save stuff
+(defun update-header-line ()
+  (if (not (equal (buffer-name) "*dashboard*"))
+      (setq header-line-format
+	    (concat (propertize " " 'display '((space :align-to 30)))
+		    (buffer-name)
+		    (if (buffer-modified-p) " - unsaved")))))
+
+(add-hook 'after-change-functions (lambda (&rest args) (update-header-line)))
+(add-hook 'buffer-list-update-hook 'update-header-line)
+(add-hook 'after-save-hook 'update-header-line)
+ 
+;; To match header line
+(fringe-mode '(17 . 17))
+
+;; Since they don't dim, don't show them
+(setq-default cursor-in-non-selected-windows nil)
 
 ;; Darktooth <3
 (load-theme 'darktooth t)
