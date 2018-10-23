@@ -292,8 +292,13 @@
 	("C-c c l" . mc/edit-lines))
     #+end_src
 
-    #+RESULTS:
-    : mc/edit-lines
+*** Expand region
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package expand-region
+	:ensure t
+	:bind 
+	("C-0" . 'er/expand-region))
+    #+end_src
 
 ** Tweaks
 *** terminal
