@@ -215,6 +215,13 @@
 	(add-hook 'prog-mode-hook 'rainbow-mode))
     #+END_SRC
 
+*** Telephone line
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package telephone-line
+	:ensure t)
+      (telephone-line-mode)
+    #+END_SRC
+
 *** Programming
      This section contains configurations and packages primarily for improving the life as a programmer.
 **** Language server 
