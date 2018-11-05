@@ -217,6 +217,52 @@
 
 *** Programming
      This section contains configurations and packages primarily for improving the life as a programmer.
+**** Language server 
+       #+BEGIN_SRC emacs-lisp :tangle yes
+	 (use-package lsp-mode
+	   :ensure t
+	   :config
+
+	   ;; make sure we have lsp-imenu everywhere we have LSP
+	   (require 'lsp-imenu)
+	   (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)  
+	   ;; get lsp-python-enable defined
+	   ;; NB: use either projectile-project-root or ffip-get-project-root-directory
+	   ;;     or any other function that can be used to find the root directory of a project
+	   (lsp-define-stdio-client lsp-python "python"
+				    #'projectile-project-root
+				    '("pyls"))
+
+	   ;; make sure this is activated when python-mode is activated
+	   ;; lsp-python-enable is created by macro above 
+	   (add-hook 'python-mode-hook
+		     (lambda ()
+		       (lsp-python-enable)))
+
+	   ;; lsp extras
+	   (use-package lsp-ui
+	     :ensure t
+	     :config
+	     (setq lsp-ui-sideline-ignore-duplicate t)
+	     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+	   (use-package company-lsp
+	     :config
+	     (push 'company-lsp company-backends))
+
+	   ;; NB: only required if you prefer flake8 instead of the default
+	   ;; send pyls config via lsp-after-initialize-hook -- harmless for
+	   ;; other servers due to pyls key, but would prefer only sending this
+	   ;; when pyls gets initialised (:initialize function in
+	   ;; lsp-define-stdio-client is invoked too early (before server
+	   ;; start)) -- cpbotha
+	   (defun lsp-set-cfg ()
+	     (let ((lsp-cfg `(:pyls (:configurationSources ("flake8")))))
+	       ;; TODO: check lsp--cur-workspace here to decide per server / project
+	       (lsp--set-configuration lsp-cfg)))
+
+	   (add-hook 'lsp-after-initialize-hook 'lsp-set-cfg))
+       #+END_SRC
 
 **** Flycheck
        #+BEGIN_SRC emacs-lisp :tangle yes
@@ -337,55 +383,6 @@
       (set-face-attribute 'vertical-border nil :foreground "#282828")
     #+END_SRC
 
-**** Remove mode line
-     Yes, even the mode line goes.
-     #+BEGIN_SRC emacs-lisp :tangle yes
-       ;; See http://bzg.fr/emacs-hide-mode-line.html
-       (defvar-local hidden-mode-line-mode nil)
-       (defvar-local hide-mode-line nil)
-
-       ;; Hide bottom border
-       (define-minor-mode hidden-mode-line-mode
-	 "Minor mode to hide the mode-line in the current buffer."
-	 :init-value nil
-	 :global nil
-	 :variable hidden-mode-line-mode
-	 :group 'editing-basics
-	 (if hidden-mode-line-mode
-	     (setq hide-mode-line mode-line-format
-		   mode-line-format nil)
-	   (setq mode-line-format hide-mode-line
-		 hide-mode-line nil))
-	 (force-mode-line-update)
-	 ;; Apparently force-mode-line-update is not always enough to
-	 ;; redisplay the mode-line
-	 (redraw-display)
-	 (when (and (called-interactively-p 'interactive)
-		    hidden-mode-line-mode)
-	   (run-with-idle-timer
-	    0 nil 'message
-	    (concat "Hidden Mode Line Mode enabled.  "
-		    "Use M-x hidden-mode-line-mode to make the mode-line appear."))))
-
-       ;; Activate hidden-mode-line-mode for all buffers
-       (hidden-mode-line-mode 1)
-       (add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
-     #+END_SRC
-**** Header line
-     To not get completely lost in all this real estate the header line gets to  be in charge of telling what file is open and it's save status. To make the spacing look right a few pixels of fringe is used.
-     #+BEGIN_SRC emacs-lisp :tangle yes
-       (defun update-header-line ()
-	 (if (not (equal (buffer-name) "*dashboard*"))
-	     (setq header-line-format
-		   (concat (propertize " " 'display '((space :align-to 30)))
-			   (buffer-name)
-			   (if (buffer-modified-p) " - unsaved")))))
-
-       (add-hook 'after-change-functions (lambda (&rest args) (update-header-line)))
-       (add-hook 'buffer-list-update-hook 'update-header-line)
-       (add-hook 'after-save-hook 'update-header-line)
-       (fringe-mode '(17 . 17))
-     #+END_SRC
 *** Stop Emacs backups
     Ok fine. It can make backup files, but at one location.
     #+BEGIN_SRC emacs-lisp :tangle yes
