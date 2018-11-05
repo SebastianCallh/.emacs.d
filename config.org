@@ -84,68 +84,77 @@
       'org-babel-load-languages
       '((R . t)
 	(emacs-lisp . t)))
-     (require 'org)
+
+     (use-package org
+       :ensure t)
   #+END_SRC
 
 **** Org Ref
  #+BEGIN_SRC emacs-lisp :tangle  yes
- (setq org-latex-prefer-user-labels t)
- (require 'org-ref)
+   (setq org-latex-prefer-user-labels t)
+   (use-package org-ref
+     :ensure t)
  #+END_SRC
 
 **** Org Gcal
   #+BEGIN_SRC emacs-lisp :tangle  yes
-  (require 'org-gcal)
-  (load "~/.emacs.d/secret/org-gcal-secrets.el") 
-  (setq org-gcal-file-alist
-	'(("t377lbbp1qucc267fq4957krb7langpe@import.calendar.google.com" .  "~/org/cal/schedule.org")
-	  ("6f72rkup96etebb0a0e0nk5a2o@group.calendar.google.com" .  "~/org/cal/spare-time.org")
-	  ("6rvcin1ktdh68ictmeuk4h39l4@group.calendar.google.com" . "~/org/cal/self-study.org")        
-	  ("pippr22reu69qqm7vqirj126o4@group.calendar.google.com" .  "~/org/cal/tdde15.org")
-	  ("iof5g7t7bl4jb39dd47uekdhsc@group.calendar.google.com" .  "~/org/cal/vvp.org")
-	  ))
+    ;; (use-package org-gcal
+    ;;   :ensure t
+    ;;   :config 
+    ;;   ((load "~/.emacs.d/secret/org-gcal-secrets.el") 
+    ;;    (setq org-gcal-file-alist
+    ;;       '(("t377lbbp1qucc267fq4957krb7langpe@import.calendar.google.com" .  "~/org/cal/schedule.org")
+    ;; 	("6f72rkup96etebb0a0e0nk5a2o@group.calendar.google.com" .  "~/org/cal/spare-time.org")
+    ;; 	("6rvcin1ktdh68ictmeuk4h39l4@group.calendar.google.com" . "~/org/cal/self-study.org")        
+    ;; 	("pippr22reu69qqm7vqirj126o4@group.calendar.google.com" .  "~/org/cal/tdde15.org")
+    ;; 	("iof5g7t7bl4jb39dd47uekdhsc@group.calendar.google.com" .  "~/org/cal/vvp.org")
+    ;; 	))))
 
-  ;; Sync on loading agenda and when capturing
-  (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+    ;; ;; Sync on loading agenda and when capturing
+    ;; (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+    ;; (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
   #+END_SRC
 
 *** Company 
      #+BEGIN_SRC emacs-lisp :tangle yes
-       (require 'company)
+       (use-package company
+	 :ensure t)
        (setq company-idle-delay 0.1)
        (setq company-tooltip-limit 10)
        (setq company-minimum-prefix-length 3)
        (setq company-tooltip-flip-when-above t)
-
        (add-hook 'after-init-hook 'global-company-mode)
      #+END_SRC
-
+ 
 *** Ido
  #+BEGIN_SRC emacs-lisp :tangle yes
- (require 'flx-ido)
- (ido-mode 1)
- (ido-everywhere 1)
- (flx-ido-mode 1)
- ;; disable ido faces to see flx highlights.
- (setq ido-enable-flex-matching t)
- (setq ido-use-faces nil)
-
+   (use-package flx-ido
+     :ensure t)
+   (ido-mode 1)
+   (ido-everywhere 1)
+   (flx-ido-mode 1)
+   ;; disable ido faces to see flx highlights.
+   (setq ido-enable-flex-matching t)
+   (setq ido-use-faces nil)
  #+END_SRC
 
 *** Smex
  #+BEGIN_SRC emacs-lisp :tangle yes
- (require 'smex)
- (smex-initialize)
- (global-set-key (kbd "C-x C-m") 'smex)
- (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+   (use-package smex
+     :ensure t)
+   (smex-initialize)
+   (global-set-key (kbd "C-x C-m") 'smex)
+   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
  #+END_SRC
 
 *** Magit 
- #+BEGIN_SRC emacs-lisp :tangle yes
- (setq magit-diff-use-overlays nil)
- (global-set-key (kbd "C-x g") 'magit-status)
- #+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package magit
+       :ensure t)
+
+     (setq magit-diff-use-overlays nil)
+     (global-set-key (kbd "C-x g") 'magit-status)
+   #+END_SRC
 
 *** Avy
   Amazing tool for moving to that place that you want to be in a buffer. 
@@ -159,9 +168,11 @@
 
 *** Projectile 
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (projectile-global-mode +1)
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (use-package projectile
+      :ensure t)
+    (projectile-global-mode +1)
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   #+END_SRC
 
 *** Switch Window
@@ -180,16 +191,19 @@
   #+END_SRC
 *** Undo Tree
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (global-undo-tree-mode)
-  (global-set-key (kbd "C--") 'undo)
-  (global-set-key (kbd "C-+") 'redo)
+    (use-package undo-tree
+      :ensure t)
+      (global-undo-tree-mode)
+      (global-set-key (kbd "C--") 'undo)
+      (global-set-key (kbd "C-+") 'redo)
   #+END_SRC
 
 *** Dimmed
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (require 'dimmer)
-  (setq dimmer-fraction 0.3)
-  (dimmer-mode)
+    (use-package dimmer
+      :ensure t)
+    (setq dimmer-fraction 0.3)
+    (dimmer-mode)
   #+END_SRC
 
 *** Rainbow mode
@@ -220,22 +234,12 @@
 	  (global-hungry-delete-mode))
       #+END_SRC
 **** Programming languages
-***** Elm
-       #+BEGIN_SRC emacs-lisp :tangle yes
-	 (add-hook 'flycheck-mode-hook 'flycheck-elm-setup)	
-	 (setq elm-tags-on-save t)
-	 (setq elm-tags-exclude-elm-stuff nil)
-	 (setq elm-sort-imports-on-save t)
-	 (add-hook 'elm-mode-hook
-		   (lambda ()
-		     (setq company-backends '(company-elm))))
-	 (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
-       #+END_SRC
-
 ***** Haskell
 	#+BEGIN_SRC emacs-lisp :tangle yes
-	  (require 'haskell-interactive-mode)
-	  (require 'haskell-process)
+	  (use-package haskell-interactive-mode
+	    :ensure t)
+	  (use-package haskell-process
+	    :ensure t)
 
 	  (setq tags-revert-without-query 1)
 	  (setq haskell-tags-on-save t)
@@ -252,7 +256,8 @@
        #+BEGIN_SRC emacs-lisp :tangle yes
 	 ;;	(eval-after-load 'flycheck 
 	 ;;	  '(flycheck-purescript-setup))
-	 (require 'psc-ide)
+	 (use-package psc-ide
+	   :ensure t)
 	 (setq psc-ide-purs-executable  "~/.nvm/versions/node/v10.10.0/bin/purs")
 	 (add-hook 'purescript-mode-hook
 		   (lambda ()
@@ -271,7 +276,8 @@
 *** Dashboard
     Remove the standard dashboard and add a new cool one.
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (require 'dashboard)
+      (use-package dashboard
+	:ensure t)
       (setq inhibit-startup-screen t)
       (dashboard-setup-startup-hook)
       (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
@@ -406,7 +412,8 @@
 *** Theme
     Darktooth theme <3
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (load-theme 'darktooth t)
+      (use-package darktooth-theme
+	:ensure t)
     #+END_SRC
 
 *** Smoother scrolling
@@ -422,10 +429,10 @@
     #+END_SRC
 
 *** Ignore bell
- Just to be sure.
- #+BEGIN_SRC emacs-lisp :tangle yes
- (setq ring-bell-function 'ignore)
- #+END_SRC
+    Useful on Windows I guess.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (setq ring-bell-function 'ignore)
+    #+END_SRC
 
 *** Follow splits
     To avoid unnecessary =C-2 C-o= or =C-3 C-o= everytime I split a window.
