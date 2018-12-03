@@ -79,14 +79,17 @@
 
 ***** Org babel
    #+BEGIN_SRC emacs-lisp :tangle yes
-     ;; active Babel languages
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((R . t)
-	(emacs-lisp . t)))
 
      (use-package org
-       :ensure t)
+       :ensure t
+       :config
+
+       ;; active Babel languages
+       (org-babel-do-load-languages
+	'org-babel-load-languages
+	'((R . t)
+	  (python . t)
+	  (emacs-lisp . t))))
   #+END_SRC
 
 **** Org Ref
