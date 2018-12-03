@@ -253,11 +253,20 @@
 	     (setq lsp-ui-sideline-ignore-duplicate t)
 	     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-	   (use-package company-lsp
-	     :config
-	     (push 'company-lsp company-backends))
+	   ;; (use-package lsp-haskel
+	   ;;   :ensure t
+	   ;;   :config
+	  ;;    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+	    ;;  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
+	   ;;   (add-hook 'haskell-mode-hook 'flycheck-mode))
 
-	   ;; NB: only required if you prefer flake8 instead of the default
+	   ;; ;; (use-p
+	   ;; package company-lsp
+	   ;;   :config
+	   ;;   (push 'company-lsp company-backends))
+
+	   ;; ;
+						 ; NB: only required if you prefer flake8 instead of the default
 	   ;; send pyls config via lsp-after-initialize-hook -- harmless for
 	   ;; other servers due to pyls key, but would prefer only sending this
 	   ;; when pyls gets initialised (:initialize function in
@@ -289,17 +298,28 @@
 **** Programming languages
 ***** Haskell
 	#+BEGIN_SRC emacs-lisp :tangle yes
-	  (use-package haskell-interactive-mode
-	    :ensure t)
-	  (use-package haskell-process
-	    :ensure t)
+	  (use-package dante
+	    :ensure t
+	    :after haskell-mode
+	    :commands 'dante-mode
+	    :init
+	    (add-hook 'haskell-mode-hook 'dante-mode)
 
-	  (setq tags-revert-without-query 1)
-	  (setq haskell-tags-on-save t)
-	  (setq haskell-stylish-on-save t)
-	  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	    (add-hook 'haskell-mode-hook 'flycheck-mode)
+	    ;; OR:
+	    ;; (add-hook 'haskell-mode-hook 'flymake-mode)
+	    )
+	  ;; (use-package haskell-interactive-mode
+	  ;;   :ensure t)
+	  ;; (use-package haskell-process
+	  ;;   :ensure t)
 
-	  (custom-set-variables
+	  ;; (setq tags-revert-without-query 1)
+	  ;; (setq haskell-tags-on-save t)
+	   (setq haskell-stylish-on-save t)
+	  ;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
+	   (custom-set-variables
 	    '(haskell-process-suggest-remove-import-lines t)
 	    '(haskell-process-auto-import-loaded-modules t)
 	    '(haskell-process-log t))
