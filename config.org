@@ -42,11 +42,10 @@
      (setq org-export-with-smart-quotes t)
      (setq org-src-window-setup 'current-window)
 
-     ; Wrap text
+     (setq ob-async-no-async-languages-alist '("ipython"))
      (add-hook 'org-mode-hook
-		 '(lambda ()
-		    (visual-line-mode 1)))
-
+	       '(lambda ()
+		  (visual-line-mode 1)))
    #+END_SRC
 ***** Org bullets
    #+BEGIN_SRC emacs-lisp :tangle yes  
@@ -79,7 +78,6 @@
 
 ***** Org babel
    #+BEGIN_SRC emacs-lisp :tangle yes
-
      (use-package org
        :ensure t
        :config
@@ -89,8 +87,21 @@
 	'org-babel-load-languages
 	'((R . t)
 	  (python . t)
+	  (ipython . t)
+	  (shell . t)
 	  (emacs-lisp . t))))
+
+     (use-package ob-async
+       :ensure t)
+
+     (use-package ob-ipython
+       :ensure t)
+
+     (use-package pyvenv
+       :ensure t)
   #+END_SRC
+
+  #+RESULTS:
 
 **** Org Ref
  #+BEGIN_SRC emacs-lisp :tangle  yes
@@ -98,7 +109,7 @@
    (use-package org-ref
      :ensure t)
  #+END_SRC
-
+ 
 **** Org Gcal
   #+BEGIN_SRC emacs-lisp :tangle  yes
     ;; (use-package org-gcal
@@ -382,6 +393,10 @@
 	("C-0" . 'er/expand-region))
     #+end_src
 
+ #+BEGIN_SRC emacs-lisp :tangle  yes
+   (use-package ein
+     :ensure t)
+ #+END_SRC
 ** Tweaks
 *** terminal
     Setup =zsh= with quick access keybind.
@@ -400,7 +415,7 @@
       (set-selection-coding-system 'utf-8)
       (prefer-coding-system 'utf-8)
     #+END_SRC
-
+    
 *** Remove clutter
     Emacs truly comes with a lot of unnecessary stuff, and that stuff 
     has to go for more screen real estate.
