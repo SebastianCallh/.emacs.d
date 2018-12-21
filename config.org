@@ -220,7 +220,7 @@
 	(add-hook 'prog-mode-hook 'rainbow-mode))
     #+END_SRC
 
-*** Telephone line
+*** Telephone Line
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package telephone-line
 	:ensure t)
@@ -375,7 +375,7 @@
 			      (agenda . 5)
 			      (projects . 5)))
     #+END_SRC
-*** Multiple cursors
+*** Multiple Cursors
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package multiple-cursors
 	:ensure t
@@ -383,18 +383,29 @@
 	("C-c c l" . mc/edit-lines))
     #+end_src
 
-*** Expand region
+*** Expand Dregion
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package expand-region
 	:ensure t
 	:bind 
 	("C-0" . 'er/expand-region))
     #+end_src
+*** EIN
+    For editing ipython notebooks.
+   #+BEGIN_SRC emacs-lisp :tangle  yes
+     (use-package ein
+       :ensure t)
+   #+END_SRC
 
- #+BEGIN_SRC emacs-lisp :tangle  yes
-   (use-package ein
-     :ensure t)
- #+END_SRC
+*** Golden Ratio
+    Automatically assign more real estate to the buffer in focus.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package golden-ratio
+	:ensure t 
+	:config 
+	(golden-ratio-mode 1))
+    #+END_SRC
+
 ** Tweaks
 *** terminal
     Setup =zsh= with quick access keybind.
