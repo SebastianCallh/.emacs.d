@@ -20,7 +20,7 @@
   #+END_SRC
 
 ** Packages
-  Setup package and add package archives.
+   Setup package and add package archives.
   #+BEGIN_SRC emacs-lisp :tangle yes
 	;; Set up package 
 	(require 'package)
@@ -244,25 +244,6 @@
 	     (setq lsp-ui-sideline-ignore-duplicate t)
 	     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-	   ;; (use-package lsp-haskel
-	   ;;   :ensure t
-	   ;;   :config
-	  ;;    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-	    ;;  (add-hook 'haskell-mode-hook #'lsp-haskell-enable)
-	   ;;   (add-hook 'haskell-mode-hook 'flycheck-mode))
-
-	   ;; ;; (use-p
-	   ;; package company-lsp
-	   ;;   :config
-	   ;;   (push 'company-lsp company-backends))
-
-	   ;; ;
-						 ; NB: only required if you prefer flake8 instead of the default
-	   ;; send pyls config via lsp-after-initialize-hook -- harmless for
-	   ;; other servers due to pyls key, but would prefer only sending this
-	   ;; when pyls gets initialised (:initialize function in
-	   ;; lsp-define-stdio-client is invoked too early (before server
-	   ;; start)) -- cpbotha
 	   (defun lsp-set-cfg ()
 	     (let ((lsp-cfg `(:pyls (:configurationSources ("flake8")))))
 	       ;; TODO: check lsp--cur-workspace here to decide per server / project
@@ -399,11 +380,27 @@
 	:bind 
 	("C-0" . 'er/expand-region))
     #+end_src
+*** EIN
+    This is for editing IPython notebooks
+    #+BEGIN_SRC emacs-lisp :tangle  yes
+      (use-package ein
+	:ensure t)
+    #+END_SRC
 
- #+BEGIN_SRC emacs-lisp :tangle  yes
-   (use-package ein
-     :ensure t)
- #+END_SRC
+*** Golden RatioResizes windows to make the one in focus have a nice size.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package golden-ratio
+	:ensure t
+	:config
+	(golcrden-ratio-mode 1)) 
+    #+END_SRC
+
+*** Pdf-tools
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package pdf-tools
+	:ensure t)
+    #+END_SRC
+
 ** Tweaks
 *** terminal
     Setup =zsh= with quick access keybind.
@@ -455,7 +452,7 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
       (setq-default cursor-in-non-selected-windows nil)
       (blink-cursor-mode 0)
-      (setq cursor-type 'bar)
+      (setq-default cursor-type 'bar)
     #+END_SRC
 
 *** Theme
@@ -517,4 +514,14 @@
       (global-set-key "\C-w" 'backward-kill-word)
       (global-set-key "\C-x\C-k" 'kill-region)
       (global-set-key "\C-c\C-k" 'kill-region)
+    #+END_SRC
+*** Show parens
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (show-paren-mode 1)
+    #+END_SRC
+*** Spell checking
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (add-hook 'text-mode-hook 'turn-on-auto-fill)
+      (add-hook 'text-mode-hook 'flyspell-mode)
+      (add-hook 'latex-mode-hook 'flyspell-mode)
     #+END_SRC
