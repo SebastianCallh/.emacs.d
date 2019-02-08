@@ -384,7 +384,10 @@
     This is for editing IPython notebooks
     #+BEGIN_SRC emacs-lisp :tangle  yes
       (use-package ein
-	:ensure t)
+	:ensure t
+	:config
+	(setq ein:worksheet-enable-undo t))
+
     #+END_SRC
 
 *** Pdf-tools
