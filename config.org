@@ -152,6 +152,12 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package ripgrep
 	:ensure t)
+*** Docker
+    #+BEGIN_SRC emacs-lisp :tangle yes 
+      (use-package docker
+	:ensure t
+	:bind ("C-c d" . docker))
+    #+END_SRC
 
       (use-package projectile
 	:ensure t
