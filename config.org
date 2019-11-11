@@ -300,7 +300,12 @@
 	:config
 	(beacon-mode 1))
     #+END_SRC
-    
+
+*** ESS
+    #+BEGIN_SRC emacs-lisp :tangle yes 
+      (use-package ess
+	:ensure t)
+    #+END_SRC
 
 ** Tweaks
 *** Transparency
