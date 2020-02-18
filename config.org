@@ -32,72 +32,87 @@
   #+END_SRC
 
 *** Org Mode
-**** Org Mode
-***** Some basic settings.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq org-src-fontify-natively t)
-     (setq org-src-tab-acts-natively t)
-     (setq org-confirm-babel-evaluate nil)
-     (setq org-export-with-smart-quotes t)
-     (setq org-src-window-setup 'current-window)
-     (add-hook 'org-mode-hook
-	       '(lambda ()
-		  (visual-line-mode 1)))
-   #+END_SRC
-***** Org bullets
-   #+BEGIN_SRC emacs-lisp :tangle yes  
-     (use-package org-bullets
-       :ensure t
-       :config
-	 (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
-   #+END_SRC
-
-***** Org todo/agenda
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq org-todo-keywords
-	   (quote ((sequence "TODO(t)" "|" "ABANDONED(b)" "DONE(d)"))))
-     (setq org-log-done t)
-     ;; Org capture
-     (setq org-default-notes-file (concat org-directory "/remember.org"))
-     (define-key global-map "\C-cr" 'org-capture)
-     (global-set-key (kbd "C-c a") 'org-agenda)
-   #+END_SRC
-
-***** Org babel
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package org
-       :ensure t
-       :config
-
-       ;; active Babel languages
-       (org-babel-do-load-languages
-	'org-babel-load-languages
-	'((R . t)
-	  (python . t)
-	  (shell . t)
-	  (emacs-lisp . t))))
+**** Personal org file
+     #+BEGIN_SRC emacs-lisp :tangle yes
+       (defun org-visit ()
+	 (interactive)
+	 (find-file "~/org/main.org"))
+       (global-set-key (kbd "C-c c o") 'org-visit)
+     #+END_SRC
+**** Some basic settings.
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (setq org-src-fontify-natively t)
+    (setq org-src-tab-acts-natively t)
+    (setq org-confirm-babel-evaluate nil)
+    (setq org-export-with-smart-quotes t)
+    (setq org-src-window-setup 'current-window)
+    (add-hook 'org-mode-hook
+	      '(lambda ()
+		 (visual-line-mode 1)))
   #+END_SRC
-
-  #+RESULTS:
-
-***** Org Ref
-  #+BEGIN_SRC emacs-lisp :tangle  yes
-    (setq org-latex-prefer-user-labels t)
-    (use-package org-ref
+**** Org bullets
+  #+BEGIN_SRC emacs-lisp :tangle yes  
+    (use-package org-bullets
       :ensure t
       :config
-      (setq reftex-default-bibliography '("~/plugg/bibliography/references.bib"))
-      (setq org-ref-bibliography-notes "~/plugg/bibliography/notes.org"
-	    org-ref-default-bibliography '("~/plugg/bibliography/references.bib")
-	    org-ref-pdf-directory "~/plugg/bibliography/bibtex-pdfs/"))
+	(add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
   #+END_SRC
 
-***** Org reveal
-       #+BEGIN_SRC emacs-lisp :tangle yes
-	 (add-to-list 'load-path "~/.emacs.d/org-reveal/")
-	 (require 'ox-reveal)
-	 (setq Org-Reveal-title-slide nil)
-       #+END_SRC
+**** Org todo/agenda
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (setq org-todo-keywords
+	  (quote ((sequence "TODO(t)" "|" "ABANDONED(b)" "DONE(d)"))))
+    (setq org-log-done t)
+    ;; Org capture
+    (setq org-default-notes-file (concat org-directory "/remember.org"))
+    (define-key global-map "\C-cr" 'org-capture)
+    (global-set-key (kbd "C-c a") 'org-agenda)
+  #+END_SRC
+
+**** Org babel
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    ;; Allow inline display of images
+    (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)   
+    (add-hook 'org-mode-hook 'org-display-inline-images)
+
+    (add-to-list 'load-path (expand-file-name "el" user-emacs-directory))
+    (use-package org
+      :ensure t
+      :config
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((emacs-lisp . t)
+	 (shell . t)
+	 (R . t)
+	 (julia . t)
+	 (python . t)
+	 (jupyter . t))))
+ #+END_SRC
+
+**** Org Ref
+ #+BEGIN_SRC emacs-lisp :tangle  yes
+   (setq org-latex-prefer-user-labels t)
+   (use-package org-ref
+     :ensure t
+     :config
+     (setq reftex-default-bibliography '("~/plugg/bibliography/references.bib"))
+     (setq org-ref-bibliography-notes "~/plugg/bibliography/notes.org"
+	   org-ref-default-bibliography '("~/plugg/bibliography/references.bib")
+	   org-ref-pdf-directory "~/plugg/bibliography/bibtex-pdfs/"))
+ #+END_SRC
+
+**** Org reveal
+      #+BEGIN_SRC emacs-lisp :tangle yes
+	(add-to-list 'load-path "~/.emacs.d/org-reveal/")
+	(require 'ox-reveal)
+	(setq Org-Reveal-title-slide nil)
+      #+END_SRC
+
+**** Org reveal
+      #+BEGIN_SRC emacs-lisp :tangle yes
+	(use-package ox-reveal
+	  :ensure t)
+      #+END_SRC
 
 *** Flycheck
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -148,10 +163,6 @@
        (global-set-key (kbd "C-x g") 'magit-status))
    #+END_SRC
 
-*** Projectile 
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package ripgrep
-	:ensure t)
 *** Docker
     #+BEGIN_SRC emacs-lisp :tangle yes 
       (use-package docker
@@ -159,6 +170,8 @@
 	:bind ("C-c d" . docker))
     #+END_SRC
 
+*** Projectile
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package projectile
 	:ensure t
 	:bind (:map projectile-mode-map
@@ -169,16 +182,21 @@
     #+END_SRC
 
 *** Avy
-  Amazing tool for moving to that place that you want to be in a buffer. 
-  Mnemonic for keybind is 'character query.
-  #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package avy
-    :ensure t
-    :bind
-      ("C-q" . avy-goto-char))
-  #+END_SRC
+    Amazing tool for moving to that place that you want to be in a buffer. 
+    Mnemonic for keybind is 'character query.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package avy
+	:ensure t
+	:bind
+	("C-q" . avy-goto-char))
+    #+END_SRC  
 
-  
+*** EIN
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package ein
+	:ensure t)
+    #+END_SRC
+
 *** Telephone Line
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package telephone-line
@@ -249,8 +267,6 @@
 	  :config
 	  (global-hungry-delete-mode))
       #+END_SRC
-
-
 *** Dashboard
     Remove the standard dashboard and add a new cool one.
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -312,18 +328,28 @@
       (use-package ess
 	:ensure t)
     #+END_SRC
+*** ZMQ
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package zmq
+	:ensure t)
+    #+END_SRC
 
+*** Emacs-Jupyter
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package jupyter
+	:ensure t)
+    #+END_SRC
 ** Tweaks
 *** Transparency
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
-      (add-to-list 'default-frame-alist '(alpha . (85 . 85))) 
+      ;(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+      ;(add-to-list 'default-frame-alist '(alpha . (85 . 85))) 
     #+END_SRC
 
 *** Terminal
     #+BEGIN_SRC emacs-lisp :tangle yes
       (defvar term-shell "/bin/bash")
-      (global-set-key (kbd "<C-return>") 'ansi-term)
+      (global-set-key (kbd "<C-return>") 'term)
     #+END_SRC
 
 *** Utf-8
@@ -442,76 +468,4 @@
       (add-hook 'text-mode-hook 'turn-on-auto-fill)
       (add-hook 'text-mode-hook 'flyspell-mode)
       ;(add-hook 'latex-mode-hook 'flyspell-mode)
-    #+END_SRC
-
-*** Fira Code Ligatures
-    Done using using [[https://github.com/tonsky/FiraCode/issues/211][this]] and requires installation of the Fira Code font.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun fira-code-mode--make-alist (list)
-	"Generate prettify-symbols alist from LIST."
-	(let ((idx -1))
-	  (mapcar
-	   (lambda (s)
-	     (setq idx (1+ idx))
-	     (let* ((code (+ #Xe100 idx))
-		(width (string-width s))
-		(prefix ())
-		(suffix '(?\s (Br . Br)))
-		(n 1))
-	   (while (< n width)
-	     (setq prefix (append prefix '(?\s (Br . Bl))))
-	     (setq n (1+ n)))
-	   (cons s (append prefix suffix (list (decode-char 'ucs code))))))
-	   list)))
-
-      (defconst fira-code-mode--ligatures
-	'("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-	  "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-	  "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-	  "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-	  ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-	  "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-	  "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-	  "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-	  ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-	  "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-	  "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-	  "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-	  "xthiswasonlyxonce" ":" "+" "+" "*"))
-
-      (defvar fira-code-mode--old-prettify-alist)
-
-      (defun fira-code-mode--enable ()
-	"Enable Fira Code ligatures in current buffer."
-	(setq-local fira-code-mode--old-prettify-alist prettify-symbols-alist)
-	(setq-local prettify-symbols-alist (append (fira-code-mode--make-alist fira-code-mode--ligatures) fira-code-mode--old-prettify-alist))
-	(prettify-symbols-mode t))
-
-      (defun fira-code-mode--disable ()
-	"Disable Fira Code ligatures in current buffer."
-	(setq-local prettify-symbols-alist fira-code-mode--old-prettify-alist)
-	(prettify-symbols-mode -1))
-
-      (define-minor-mode fira-code-mode
-	"Fira Code ligatures minor mode"
-	:lighter " Fira Code"
-	(setq-local prettify-symbols-unprettify-at-point 'right-edge)
-	(if fira-code-mode
-	    (fira-code-mode--enable)
-	  (fira-code-mode--disable)))
-
-      (defun fira-code-mode--setup ()
-	"Setup Fira Code Symbols"
-	(set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol"))
-
-      
-      (provide 'fira-code-mode)
-      (add-hook 'prog-mode-hook #'fira-code-mode)
-      ;; (fira-code-mode)
-    #+END_SRC
-    
-    #+BEGIN_SRC elisp
-      (let ((path-from-shell (replace-regexp-in-string "[ \t\n]*$" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-	(setenv "PATH" path-from-shell)
-	(setq exec-path (split-string path-from-shell path-separator)))
     #+END_SRC
