@@ -87,6 +87,11 @@
 	 (julia . t)
 	 (python . t)
 	 (jupyter . t))))
+
+    ;; Avoid conflicts with :async keyword
+    (setq ob-async-no-async-languages-alist '("jupyter-python" 
+					      "jupyter-julia"))
+
  #+END_SRC
 
 **** Org Ref
