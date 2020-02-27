@@ -105,14 +105,6 @@
 	   org-ref-default-bibliography '("~/plugg/bibliography/references.bib")
 	   org-ref-pdf-directory "~/plugg/bibliography/bibtex-pdfs/"))
  #+END_SRC
-
-**** Org reveal
-      #+BEGIN_SRC emacs-lisp :tangle yes
-	(add-to-list 'load-path "~/.emacs.d/org-reveal/")
-	(require 'ox-reveal)
-	(setq Org-Reveal-title-slide nil)
-      #+END_SRC
-
 **** Org reveal
       #+BEGIN_SRC emacs-lisp :tangle yes
 	(use-package ox-reveal
