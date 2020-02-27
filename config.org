@@ -409,9 +409,9 @@
     #+END_SRC
 
 *** Theme
-    Darktooth theme <3
+    Zenburn theme <3
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package darktooth-theme
+      (use-package zenburn-theme
 	:ensure t)
     #+END_SRC
 
