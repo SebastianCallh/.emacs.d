@@ -339,6 +339,13 @@
       (use-package jupyter
 	:ensure t)
     #+END_SRC
+
+*** YAML mode
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package yaml-mode
+	:ensure t)
+    #+END_SRC
+
 ** Tweaks
 *** Transparency
     #+BEGIN_SRC emacs-lisp :tangle yes
