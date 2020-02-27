@@ -302,16 +302,6 @@
       (use-package pdf-tools
 	:ensure t)
     #+END_SRC
-
-*** Golden Ratio
-    Automatically assign more real estate to the buffer in focus.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package golden-ratio
-	:ensure t 
-	:config 
-	(golden-ratio-mode 1))
-    #+END_SRC
-
 *** Beacon
     #+BEGIN_SRC emacs-lisp :tangle yes 
       (use-package beacon
