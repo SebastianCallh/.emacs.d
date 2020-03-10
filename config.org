@@ -7,16 +7,16 @@
       (defun config-visit ()
 	(interactive)
 	(find-file "~/.emacs.d/config.org"))
-      (global-set-key (kbd "C-c c e") 'config-visit)
+      (global-set-key (kbd "C-x x e") 'config-visit)
     #+END_SRC
 
 *** Reloading
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun config-reload ()
-    "Reloads ~/.emacs.d/config.org at runtime"
-    (interactive)
-    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
-  (global-set-key (kbd "C-c c r") 'config-reload)
+    (defun config-reload ()
+      "Reloads ~/.emacs.d/config.org at runtime"
+      (interactive)
+      (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+    (global-set-key (kbd "C-x x r") 'config-reload)
   #+END_SRC
 
 ** Packages
@@ -37,7 +37,7 @@
        (defun org-visit ()
 	 (interactive)
 	 (find-file "~/org/main.org"))
-       (global-set-key (kbd "C-c c o") 'org-visit)
+       (global-set-key (kbd "C-x x o") 'org-visit)
      #+END_SRC
 **** Some basic settings.
   #+BEGIN_SRC emacs-lisp :tangle yes
