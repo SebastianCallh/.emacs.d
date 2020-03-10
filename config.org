@@ -259,27 +259,20 @@
     Remove the standard dashboard and add a new cool one.
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package dashboard
-	:ensure t)
-      (setq inhibit-startup-screen t)
-      (dashboard-setup-startup-hook)
-      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-      (setq dashboard-banner-logo-title "")
-      (setq dashboard-startup-banner "~/.emacs.d/images/lambda.png")
-      (add-to-list 'dashboard-items '(agenda) t)
-      (setq show-week-agenda-p t)
-      (setq dashboard-items '((recents  . 5)
-			      (bookmarks . 5)
-			      (agenda . 5)
-			      (projects . 5)))
-    #+END_SRC
-*** Multiple Cursors
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package multiple-cursors
 	:ensure t
-	:bind 
-	("C-c c l" . mc/edit-lines))
-    #+end_src
-
+	:config
+	(setq inhibit-startup-screen t)
+	(dashboard-setup-startup-hook)
+	(setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+	(setq dashboard-banner-logo-title "O hai")
+	(setq dashboard-startup-banner nil) ;;"~/.emacs.d/images/lambda.png")
+	(add-to-list 'dashboard-items '(agenda) t)
+	(setq show-week-agenda-p t)
+	(setq dashboard-items '((recents  . 5)
+				(bookmarks . 5)
+				(agenda . 5)
+				(projects . 5))))
+    #+END_SRC
 *** Expand Region
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package expand-region
