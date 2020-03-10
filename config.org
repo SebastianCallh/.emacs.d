@@ -61,16 +61,21 @@
 **** Org todo/agenda
   #+BEGIN_SRC emacs-lisp :tangle yes
     (setq org-todo-keywords
-	  (quote ((sequence "TODO(t)" "|" "ABANDONED(b)" "DONE(d)"))))
+	  (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "ABANDONED(b@)" "DONE(d!)"))))
     (setq org-log-done t)
     ;; Org capture
     (setq org-default-notes-file (concat org-directory "/remember.org"))
-    (define-key global-map "\C-cr" 'org-capture)
+    (global-set-key (kbd "C-c l") 'org-store-link)
     (global-set-key (kbd "C-c a") 'org-agenda)
+    (global-set-key (kbd "C-c c") 'org-capture)
   #+END_SRC
 
 **** Org babel
   #+BEGIN_SRC emacs-lisp :tangle yes
+
+    (use-package jupyter
+      :ensure t)
+
     ;; Allow inline display of images
     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)   
     (add-hook 'org-mode-hook 'org-display-inline-images)
