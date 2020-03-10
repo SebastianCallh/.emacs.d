@@ -465,3 +465,15 @@
       (add-hook 'text-mode-hook 'flyspell-mode)
       ;(add-hook 'latex-mode-hook 'flyspell-mode)
     #+END_SRC
+
+*** Speedup tramp
+    Having this on causes [[https://www.emacswiki.org/emacs/RecentFiles][issues]] with Tramp. Speedups from [[https://www.gnu.org/software/emacs/manual/html_node/tramp/Frequently-Asked-Questions.html][here]] and [[https://www.reddit.com/r/emacs/comments/320cvb/projectile_slows_tramp_mode_to_a_crawl_is_there_a/][here]].
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (setq tramp-verbose 1)
+      (setq vc-handled-backends '(Git))
+      (setq recentf-auto-cleanup 'never)
+      (setq tramp-completion-reread-directory-timeout nil)
+      (defadvice projectile-project-root (around ignore-remote first activate)
+	(unless (file-remote-p default-directory) ad-do-it))
+    #+END_SRC
+    
