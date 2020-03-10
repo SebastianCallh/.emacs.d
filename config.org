@@ -110,9 +110,16 @@
 	   org-ref-default-bibliography '("~/plugg/bibliography/references.bib")
 	   org-ref-pdf-directory "~/plugg/bibliography/bibtex-pdfs/"))
  #+END_SRC
+
 **** Org reveal
       #+BEGIN_SRC emacs-lisp :tangle yes
 	(use-package ox-reveal
+	  :ensure t)
+      #+END_SRC
+
+**** Org pandoc
+      #+BEGIN_SRC emacs-lisp :tangle yes
+	(use-package ox-pandoc
 	  :ensure t)
       #+END_SRC
 
