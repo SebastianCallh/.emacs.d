@@ -200,10 +200,13 @@
 	("C-q" . avy-goto-char))
     #+END_SRC  
 
-*** EIN
+*** Pyvenv
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package ein
-	:ensure t)
+      (use-package pyvenv
+	:ensure t
+	:config
+	(setenv "WORKON_HOME" 
+		(concat (getenv "HOME") "/anaconda3/envs")))
     #+END_SRC
 
 *** Telephone Line
