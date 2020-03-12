@@ -345,10 +345,14 @@
       ;(add-to-list 'default-frame-alist '(alpha . (85 . 85))) 
     #+END_SRC
 
+*** Font size
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (set-default-font "Monospace 14")
+    #+END_SRC
+
 *** Terminal
     #+BEGIN_SRC emacs-lisp :tangle yes
       (defvar term-shell "/bin/bash")
-      (global-set-key (kbd "<C-return>") 'term)
     #+END_SRC
 
 *** Utf-8
