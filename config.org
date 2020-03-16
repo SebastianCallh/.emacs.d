@@ -168,17 +168,26 @@
    (global-set-key (kbd "M-X") 'smex-major-mode-commands)
  #+END_SRC
 
-*** Magit
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package magit
-       :ensure t
-       :config
-       (setq magit-diff-use-overlays nil)
-       (global-set-key (kbd "C-x g") 'magit-status))
-   #+END_SRC
+*** Git
+**** Magit
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package magit
+	:ensure t
+	:config
+	(setq magit-diff-use-overlays nil)
+	(global-set-key (kbd "C-x g") 'magit-status))
+    #+END_SRC
+***** Diff-hl
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package diff-hl
+	:ensure t
+	:config
+	(global-diff-hl-mode)
+	(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+    #+END_SRC
 
 *** Docker
-    #+BEGIN_SRC emacs-lisp :tangle yes 
+    #+BEGIN_SRC emacs-lisp :tangle no
       (use-package docker
 	:ensure t
 	:bind ("C-c d" . docker))
