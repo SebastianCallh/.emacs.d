@@ -345,8 +345,23 @@
 	(global-set-key (kbd "C-c s") 'shell-here))
     #+END_SRC
 
+*** Elpy
+    Used by EIN
+     #+BEGIN_SRC emacs-lisp :tangle yes
+       (use-package elpy
+	 :ensure t)
+     #+END_SRC
 
-
+*** EIN
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package ein
+	:ensure t
+	:config
+	(elpy-enable)
+	(setq ein:output-area-inlined-images 1)
+	(setq ein:worksheet-enable-undo t))
+    #+END_SRC
+    
 ** Tweaks
 *** Transparency
     #+BEGIN_SRC emacs-lisp :tangle yes
