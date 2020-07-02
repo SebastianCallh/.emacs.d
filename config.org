@@ -36,11 +36,12 @@
      #+BEGIN_SRC emacs-lisp :tangle yes
        (defun org-visit ()
 	 (interactive)
-	 (find-file "~/org/main.org"))
+	 (find-file (concat org-directory "/main.org")))
        (global-set-key (kbd "C-x x o") 'org-visit)
      #+END_SRC
 **** Some basic settings.
   #+BEGIN_SRC emacs-lisp :tangle yes
+    (setq org-directory "~/Dropbox/org")
     (setq org-src-fontify-natively t)
     (setq org-src-tab-acts-natively t)
     (setq org-confirm-babel-evaluate nil)
