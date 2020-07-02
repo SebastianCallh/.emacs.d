@@ -129,6 +129,17 @@
 	  :ensure t)
       #+END_SRC
 
+**** Org Hugo
+      #+BEGIN_SRC emacs-lisp :tangle yes
+	(use-package ox-hugo
+	  :ensure t)
+      #+END_SRC
+
+**** Org Async
+      #+BEGIN_SRC emacs-lisp :tangle yes
+	(use-package ob-async
+	  :ensure t)
+      #+END_SRC
 *** Flycheck
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package flycheck
