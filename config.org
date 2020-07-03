@@ -430,8 +430,7 @@
 *** Open links in Firefox
     Instead of default chrome.
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq browse-url-browser-function 'browse-url-firefox
-	    browse-url-new-window-flag  t)
+      (setq browse-url-browser-function 'browse-url-firefox)
     #+END_SRC
 
 *** Configure cursor
