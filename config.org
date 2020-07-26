@@ -445,12 +445,13 @@
 *** Theme
     Zenburn theme <3
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package zenburn-theme
-	:ensure t
-	:init
-	(setq zenburn-use-variable-pitch t)
-	(setq zenburn-scale-org-headlines t)
-	(setq zenburn-scale-outline-headlines t))
+       (use-package zenburn-theme
+         :ensure t
+         :config
+         (enable-theme 'zenburn)
+         (setq zenburn-use-variable-pitch t)
+         (setq zenburn-scale-org-headlines t)
+         (setq zenburn-scale-outline-headlines t))
     #+END_SRC
 
 *** Smoother scrolling
