@@ -533,7 +533,10 @@
 
 *** Show parens
     #+BEGIN_SRC emacs-lisp
-      (show-paren-mode 1)
+      (use-package rainbow-delimiters
+	:ensure t
+	:config
+	(add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
     #+END_SRC
 
 *** Spell checking
