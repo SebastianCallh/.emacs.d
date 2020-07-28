@@ -42,21 +42,29 @@
      #+END_SRC
 
 **** Some basic settings.
-  #+BEGIN_SRC emacs-lisp
-    (setq org-directory "~/Dropbox/org")
-    (setq org-src-fontify-natively t)
-    (setq org-src-tab-acts-natively t)
-    (setq org-confirm-babel-evaluate nil)
-    (setq org-export-with-smart-quotes t)
-    (setq org-src-window-setup 'current-window)
-    (add-hook 'org-mode-hook
-	      '(lambda ()
-		 (visual-line-mode 1)))
-    ;; Images
-    (setq org-display-inline-images t) 
-    (setq org-redisplay-inline-images t) 
-    (setq org-startup-with-inline-images "inlineimages")
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (setq org-directory "~/Dropbox/org")
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-export-with-smart-quotes t)
+  (setq org-src-window-setup 'current-window)
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (visual-line-mode 1)))
+  (setq org-hide-leading-stars 't)
+
+  ;; Text 
+  (org-indent-mode t)
+  (setq org-indent-indentation-per-level 1)
+  (setq org-adapt-indentation nil)
+  (setq org-hide-emphasis-markers t)
+
+  ;; Images
+  (setq org-display-inline-images t) 
+  (setq org-redisplay-inline-images t) 
+  (setq org-startup-with-inline-images "inlineimages")
+#+END_SRC
 **** Org bullets
   #+BEGIN_SRC emacs-lisp
     (use-package org-bullets
