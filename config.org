@@ -145,30 +145,35 @@
 	 (add-hook 'after-init-hook 'global-company-mode))
      #+END_SRC
  
-*** Ido
- #+BEGIN_SRC emacs-lisp
-   (use-package flx-ido
-     :ensure t
-     :config
-     (ido-mode 1)
-     (ido-everywhere 1)
-     (flx-ido-mode 1)
-     (setq ido-enable-flex-matching t)
-     (setq ido-use-faces nil))
- #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (setq company-idle-delay 0.1)
+    (setq company-tooltip-limit 10)
+    (setq company-minimum-prefix-length 3)
+    (setq company-tooltip-flip-when-above t)
+    (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
+*** Selectrum
+For powerful ~M-x~, ~C-x + C-f~ etc.
+#+begin_src emacs-lisp
+  (use-package selectrum
+    :ensure t
+    :config
+    (selectrum-mode +1))
 
-*** Smex
- #+BEGIN_SRC emacs-lisp
-   (use-package smex
-     :ensure t)
-   (smex-initialize)
-   (global-set-key (kbd "C-x C-m") 'smex)
-   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
- #+END_SRC
+  (use-package prescient
+    :ensure t
+    :config 
+    (prescient-persist-mode +1))
 
- #+RESULTS:
- : smex-major-mode-commands
-
+  (use-package selectrum-prescient
+    :ensure t
+    :after (selectrum prescient)
+    :config
+    (selectrum-prescient-mode +1))
+#+end_src
 *** Git
 **** Magit
     #+BEGIN_SRC emacs-lisp
