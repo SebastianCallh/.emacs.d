@@ -391,6 +391,14 @@ Used by EIN
     :ensure t
     :after (eglot))
 #+end_src
+** Emojify
+:smile::100::rofl::rofl::fire::rofl::smile::rofl::100::fire::smile::100::fire::rofl::rofl::smile::100::fire::rofl:
+#+begin_src emacs-lisp
+  (use-package emojify
+    :ensure t
+    :config
+    (add-hook 'after-init-hook #'global-emojify-mode))
+#+end_src
 
 
 ** Tweaks
