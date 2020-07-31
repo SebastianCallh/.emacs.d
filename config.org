@@ -1,9 +1,29 @@
 #+PROPERTY: header-args :tangle yes
-
 * Emacs config
-This file is tangled and the results are sources by =init.el= upon start.
-** Editing this file
-*** Opening
+This file is tangled and the results are sources by =init.el= upon
+start.
+
+Setup package and add package archives.
+#+BEGIN_SRC emacs-lisp
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+ (straight-use-package 'use-package)
+ (setq straight-use-package-by-default t)
+#+END_SRC
+
+* Editing this file
+** Opening
 #+BEGIN_SRC emacs-lisp
   (defun config-visit ()
     (interactive)
@@ -11,7 +31,7 @@ This file is tangled and the results are sources by =init.el= upon start.
   (global-set-key (kbd "C-x x e") 'config-visit)
 #+END_SRC
 
-*** Reloading
+** Reloading
 #+BEGIN_SRC emacs-lisp
   (defun config-reload ()
     "Reloads ~/.emacs.d/config.org at runtime"
@@ -20,64 +40,53 @@ This file is tangled and the results are sources by =init.el= upon start.
   (global-set-key (kbd "C-x x r") 'config-reload)
 #+END_SRC
 
-** Packages
-Setup package and add package archives.
+* Org Mode
+** Org config
 #+BEGIN_SRC emacs-lisp
-  ;; Set up package 
-  (require 'package)
-  (setq package-archives
-        '(("gnu"         . "http://elpa.gnu.org/packages/")
-          ("org"         . "http://orgmode.org/elpa/")
-          ("melpa"       . "http://melpa.org/packages/")))
-  (package-initialize)
+    (use-package org
+      :after(jupyter ess)
+      :config
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((emacs-lisp . t)
+         (shell . t)
+  ;       (julia . t)
+         (python . t)
+         (jupyter . t)))
+
+      (setq org-directory "~/Dropbox/org")
+      (setq org-src-fontify-natively t)
+      (setq org-src-tab-acts-natively t)
+      (setq org-confirm-babel-evaluate nil)
+      (setq org-export-with-smart-quotes t)
+      (setq org-src-window-setup 'current-window)
+      (setq org-hide-leading-stars 't)
+
+      ;; Text
+      ;; (setq org-startup-indented t) this breaks some weird timer
+      (setq org-indent-indentation-per-level 1)
+      (setq org-adapt-indentation nil)
+      (setq org-hide-emphasis-markers t)
+
+      ;; Images
+      (setq org-display-inline-images t) 
+      (setq org-redisplay-inline-images t) 
+      (setq org-startup-with-inline-images "inlineimages")
+
+      ;; Avoid conflicts with :async keyword
+      (setq ob-async-no-async-languages-alist '("jupyter-python" 
+                                                "jupyter-julia"))
+      (add-hook 'org-mode-hook 'org-indent-mode))
 #+END_SRC
 
-*** Org Mode
-**** Personal org file
+** Personal org file
 #+BEGIN_SRC emacs-lisp
   (defun org-visit ()
     (interactive)
     (find-file (concat org-directory "/main.org")))
   (global-set-key (kbd "C-x x o") 'org-visit)
 #+END_SRC
-
-**** Some basic settings.
-#+BEGIN_SRC emacs-lisp
-  (setq org-directory "~/Dropbox/org")
-  (setq org-src-fontify-natively t)
-  (setq org-src-tab-acts-natively t)
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-export-with-smart-quotes t)
-  (setq org-src-window-setup 'current-window)
-  (add-hook 'org-mode-hook
-            '(lambda ()
-               (visual-line-mode 1)))
-  (setq org-hide-leading-stars 't)
-
-  ;; Text 
-  (org-indent-mode t)
-  (setq org-indent-indentation-per-level 1)
-  (setq org-adapt-indentation nil)
-  (setq org-hide-emphasis-markers t)
-
-  ;; Images
-  (setq org-display-inline-images t) 
-  (setq org-redisplay-inline-images t) 
-  (setq org-startup-with-inline-images "inlineimages")
-#+END_SRC
-
-#+RESULTS:
-: inlineimages
-
-**** Org bullets
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
-#+END_SRC
-
-**** Org todo/agenda
+** Org todo/agenda
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "ABANDONED(b@)" "DONE(d!)"))))
@@ -88,384 +97,37 @@ Setup package and add package archives.
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
-
-**** Org babel
+** Org export
 #+BEGIN_SRC emacs-lisp
-  (use-package jupyter
-    :ensure t)
-
-  (add-to-list 'load-path (expand-file-name "el" user-emacs-directory))
-  (use-package org
-    :ensure t
-    :after(ess)
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (shell . t)
-       (R . t)
-       (julia . t)
-       (python . t)
-       (jupyter . t))))
-
-  ;; Avoid conflicts with :async keyword
-  (setq ob-async-no-async-languages-alist '("jupyter-python" 
-                                            "jupyter-julia"))
-
-#+END_SRC
-**** Org reveal
-#+BEGIN_SRC emacs-lisp
-  (use-package htmlize
-    :ensure t)
+  (use-package ox-hugo)
+  (use-package ox-pandoc)
   (use-package ox-reveal
-    :ensure t
     :after (htmlize))
 #+END_SRC
 
-**** Org Pandoc
+** Org babel
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-pandoc
-    :ensure t)
+  (use-package ob-async)
 #+END_SRC
 
-**** Org Hugo
+* Aesthetics
+** Font
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-hugo
-    :ensure t)
+  (set-face-attribute 'default nil :family "Monoid" :height 120)
 #+END_SRC
 
-**** Org Async
-#+BEGIN_SRC emacs-lisp
-  (use-package ob-async
-    :ensure t)
-#+END_SRC
-
-*** Flycheck
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :init
-    (global-flycheck-mode t))
-#+END_SRC
-
-*** Company
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure t
-    :config
-    (setq company-idle-delay 0.1)
-    (setq company-tooltip-limit 10)
-    (setq company-minimum-prefix-length 3)
-    (setq company-tooltip-flip-when-above t)
-    (add-hook 'after-init-hook 'global-company-mode))
-#+END_SRC
-*** Selectrum
-For powerful ~M-x~, ~C-x + C-f~ etc.
-#+begin_src emacs-lisp
-  (use-package selectrum
-    :ensure t
-    :config
-    (selectrum-mode +1))
-
-  (use-package prescient
-    :ensure t
-    :config 
-    (prescient-persist-mode +1))
-
-  (use-package selectrum-prescient
-    :ensure t
-    :after (selectrum prescient)
-    :config
-    (selectrum-prescient-mode +1))
-#+end_src
-*** Git
-**** Magit
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :config
-    (setq magit-diff-use-overlays nil)
-    (global-set-key (kbd "C-x g") 'magit-status))
-#+END_SRC
-
-**** Diff-hl
-#+BEGIN_SRC emacs-lisp
-  (use-package diff-hl
-    :ensure t
-    :config
-    (global-diff-hl-mode)
-    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
-#+END_SRC
-
-*** Docker
-#+BEGIN_SRC emacs-lisp
-  (use-package docker
-    :ensure t
-    :bind ("C-c d" . docker))
-#+END_SRC
-*** Avy
-Amazing tool for moving to that place that you want to be in a buffer. 
-Mnemonic for keybind is 'character query.
-#+BEGIN_SRC emacs-lisp
-  (use-package avy
-    :ensure t
-    :bind
-    ("C-q" . avy-goto-char))
-#+END_SRC  
-
-*** Pyvenv
-#+BEGIN_SRC emacs-lisp
-  (use-package pyvenv
-    :ensure t
-    :config
-    (setenv "WORKON_HOME" 
-            (concat (getenv "HOME") "/anaconda3/envs")))
-#+END_SRC
-
-*** Feeble Line
-#+BEGIN_SRC emacs-lisp
-  (use-package feebleline
-    :ensure t
-    :config (setq feebleline-msg-functions
-                  '((feebleline-line-number         :post "" :fmt "%5s")
-                    (feebleline-column-number       :pre ":" :fmt "%-2s")
-                    (feebleline-file-directory      :face feebleline-dir-face :post "")
-                    (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
-                    (feebleline-file-modified-star  :face font-lock-warning-face :post "")
-                    (feebleline-git-branch       :face feebleline-git-face :pre " : ")
-                    (feebleline-project-name     :align right)))
-    (feebleline-mode 1))
-#+END_SRC
-
-*** Yasnippet
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :ensure t)
-#+END_SRC
-    
-*** Language server
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :init
-    (setq lsp-keymap-prefix "M-p")
-    :commands lsp
-    :custom
-    (lsp-enable-snippet 'f)
-    (lsp-auto-guess-root nil)
-    (lsp-prefer-flymake nil)
-    :hook ((python-mode) . lsp)
-    :config
-    (lsp-register-custom-settings '(("pyls.plugins.pyls_mypy.enabled" t t))))
-
-  (use-package lsp-ui
-    :ensure t)
-
-  (use-package company-lsp
-    :ensure t
-    :config
-    (setq company-lsp-enable-snippet t)
-    (push 'company-lsp company-backends))
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection "~/anaconda3/bin/pyls")
-                    :major-modes '(python-mode)
-                    :remote? t
-                    :server-id 'pyls-remote))
-
-#+END_SRC
-
-**** Hungry delete
-Avoids cleaning up white space.                   
-#+BEGIN_SRC emacs-lisp
-  (use-package hungry-delete
-    :ensure t
-    :config
-    (global-hungry-delete-mode))
-#+END_SRC
-*** Dashboard
-Remove the standard dashboard and add a new cool one.
-#+BEGIN_SRC emacs-lisp
-  (use-package dashboard
-    :ensure t
-    :config
-    (setq inhibit-startup-screen t)
-    (dashboard-setup-startup-hook)
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-    (setq dashboard-startup-banner nil)
-    (add-to-list 'dashboard-items '(agenda) t)
-    (setq show-week-agenda-p t)
-    (setq dashboard-items '((recents  . 5)
-                            (bookmarks . 5)
-                            (agenda . 5)
-                            (projects . 5))))
-#+END_SRC
-*** Expand Region
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :ensure t
-    :bind 
-    ("C-0" . 'er/expand-region))
-#+end_src
-<<<<<<< HEAD
-*** Beacon
-#+BEGIN_SRC emacs-lisp 
-  (use-package beacon
-    :ensure t
-    :config
-    (beacon-mode 1))
-#+END_SRC
-
-*** ESS
-Required for Julia in ~org-babel~.
-#+BEGIN_SRC emacs-lisp 
-  (use-package ess
-    :ensure t
-    :init 
-    (setq inferior-julia-program-name "/usr/local/bin/julia"))
-#+END_SRC
-
-*** ZMQ
-Required to run emacs Jupyter stuff on remote server.
-#+BEGIN_SRC emacs-lisp
-  (use-package zmq
-    :ensure t)
-#+END_SRC
-
-*** YAML mode
-#+BEGIN_SRC emacs-lisp
-  (use-package yaml-mode
-    :ensure t)
-#+END_SRC
-*** Shell-here
-#+BEGIN_SRC emacs-lisp
-  (use-package shell-here
-    :ensure t
-    :config
-    (global-set-key (kbd "C-c s") 'shell-here))
-#+END_SRC
-
-*** Elpy
-Used by EIN
-#+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :ensure t)
-#+END_SRC
-
-*** EIN
-#+BEGIN_SRC emacs-lisp
-  (use-package ein
-    :ensure t
-    :after (elpy)
-    :config
-    (elpy-enable)
-    (setq ein:output-area-inlined-images 1)
-    (setq ein:worksheet-enable-undo t))
-#+END_SRC    
-
-*** Dimmer
-#+BEGIN_SRC emacs-lisp
-  (use-package dimmer 
-    :ensure t
-    :config 
-    (dimmer-mode t)
-    (setq dimmer-fraction 0.4))
-#+END_SRC
-
-*** Julia
-#+begin_src emacs-lisp
-  (use-package julia-mode
-    :ensure t)
-  (use-package julia-repl
-    :ensure t
-    :config
-    (add-hook 'julia-mode-hook 'julia-repl-mode))
-#+end_src
-
-*** Eglot
-#+begin_src emacs-lisp
-  (use-package eglot
-    :ensure t)
-
-  (use-package eglot-jl
-    :ensure t
-    :after (eglot))
-#+end_src
-** Emojify
-:smile::100::rofl::rofl::fire::rofl::smile::rofl::100::fire::smile::100::fire::rofl::rofl::smile::100::fire::rofl:
-#+begin_src emacs-lisp
-  (use-package emojify
-    :ensure t
-    :config
-    (add-hook 'after-init-hook #'global-emojify-mode))
-#+end_src
-
-
-** Tweaks
-*** Font
-#+BEGIN_SRC emacs-lisp
-  (set-frame-font "Monoid 12")
-  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 100)
-  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height 100)
-  (set-face-attribute 'variable-pitch nil :family "Spectral" :height 130)
-#+END_SRC
-
-#+RESULTS:
-
-*** Terminal
-#+BEGIN_SRC emacs-lisp
-  (defvar term-shell "/bin/bash")
-#+END_SRC
-
-*** Utf-8
-#+BEGIN_SRC emacs-lisp
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
-#+END_SRC    
-*** Remove clutter
-Emacs truly comes with a lot of unnecessary stuff, and that stuff 
-has to go for more screen real estate.
-
-**** Remove all bars
-#+BEGIN_SRC emacs-lisp
-  (menu-bar-no-scroll-bar)
-  (tool-bar-mode 0)
-  (menu-bar-mode 0)
-  (fringe-mode 1)
-  (setq left-fringe-width 10)
-  (setq right-fringe-width 0)
-#+END_SRC
-
-*** Stop Emacs backups
-Ok fine. It can make backup files, but at one location.
-#+BEGIN_SRC emacs-lisp
-  ;; Do not clutter everything with .file~
-  (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
-#+END_SRC
-
-*** Open links in Firefox
-Instead of default chrome.
-#+BEGIN_SRC emacs-lisp
-  (setq browse-url-browser-function 'browse-url-firefox)
-#+END_SRC
-
-*** Configure cursor
-Make the cursor more minimalistic. Since cursors in inactive buffers 
-don't work with dimmer, they're not shown. 
+** Configure cursor
+Make the cursor more minimalistic.
 #+BEGIN_SRC emacs-lisp
   (setq-default cursor-in-non-selected-windows 1)
   (blink-cursor-mode 0)
   (setq-default cursor-type 'bar)
 #+END_SRC
 
-*** Theme
-Zenburn theme <3
+** Zenburn theme
+   Zenburn theme <3
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
-    :ensure t
     :config
     (enable-theme 'zenburn)
     (setq zenburn-use-variable-pitch t)
@@ -473,27 +135,68 @@ Zenburn theme <3
     (setq zenburn-scale-outline-headlines t))
 #+END_SRC
 
-#+RESULTS:
+** Rainbow delimiters
+   #+BEGIN_SRC emacs-lisp
+      (use-package rainbow-delimiters
+	:config
+	(add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+   #+END_SRC
 
-*** Smoother scrolling
+** Mode-line
+~Mini-modeline~ and ~smart-mode-line~. Way less buggy than [[https://github.com/tautologyclub/feebleline][Feebleline]] and also frees up real estate.
+#+begin_src emacs-lisp
+    (use-package smart-mode-line
+      :config
+      (sml/setup))
+
+    (use-package mini-modeline
+      :after smart-mode-line
+      :config
+      (mini-modeline-mode t))
+#+end_src
+* Navigation and ergonomics
+** Selectrum
+For powerful ~M-x~, ~C-x + C-f~ etc.
+#+begin_src emacs-lisp
+  (use-package selectrum
+    :config
+    (selectrum-mode +1))
+#+end_src
+
+** Prescient
+More intelligent search with [[*Selectrum][Selectrum]].
+#+begin_src emacs-lisp
+  (use-package prescient
+    :config 
+    (prescient-persist-mode +1))
+
+  (use-package selectrum-prescient
+    :after (selectrum prescient)
+    :config
+    (selectrum-prescient-mode +1))
+#+end_src
+
+** Hungry delete
+Avoids cleaning up white space.                   
+#+BEGIN_SRC emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :config
+    (global-hungry-delete-mode))
+#+END_SRC
+** Smoother scrolling
 This makes the buffer content "stream" in and out of focus instead of the default janky jumps.
 #+BEGIN_SRC emacs-lisp
   (setq scroll-conservatively 100)
 #+END_SRC
 
-*** Yes-or-no-prompts
+** Yes-or-no-prompts
 No need to ever be verbose again. Simplify confirmation prompts.
 #+BEGIN_SRC emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
-*** Ignore bell
-Useful on Windows I guess.
-#+BEGIN_SRC emacs-lisp
-  (setq ring-bell-function 'ignore)
-#+END_SRC
-
-*** Follow splits
+** Follow splits
 To avoid unnecessary =C-2 C-o= or =C-3 C-o= everytime I split a window.
 
 #+BEGIN_SRC emacs-lisp
@@ -512,7 +215,7 @@ To avoid unnecessary =C-2 C-o= or =C-3 C-o= everytime I split a window.
   (global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
 #+END_SRC
 
-*** Always kill current buffer 
+** Always kill current buffer 
 To avoid unnecessary confirmation when doing =C-x k= which I have never used to kill 
 a buffer I am not currently in.
 #+BEGIN_SRC emacs-lisp
@@ -523,37 +226,184 @@ a buffer I am not currently in.
   (global-set-key (kbd "C-x k") 'kill-current-buffer)
 #+END_SRC
 
-*** Custom keybinds
+* Programming
+** Git
+
+*** Magit
+Git from Emacs!
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :config
+    (setq magit-diff-use-overlays nil)
+    (global-set-key (kbd "C-x g") 'magit-status))
+#+END_SRC
+
+*** Diff-hl
+Hightlight Git diffs in fringes.
+#+BEGIN_SRC emacs-lisp
+  (use-package diff-hl
+    :config
+    (global-diff-hl-mode)
+    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+#+END_SRC
+
+** Eglot
+#+begin_src emacs-lisp :tangle no
+  (use-package eglot)
+  (use-package eglot-jl
+    :after (eglot))
+#+end_src
+** Jupyter
+For connecting ~org-babel~ to Jupyter sessions.
+#+BEGIN_SRC emacs-lisp 
+  (use-package jupyter)
+#+END_SRC
+
+** Ess
+Required for Julia in ~org-babel~.
+#+BEGIN_SRC emacs-lisp 
+  (use-package ess
+    :init 
+    (setq inferior-julia-program-name "/usr/local/bin/julia"))
+#+END_SRC
+
+** Language server
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :init
+    (setq lsp-keymap-prefix "M-p")
+    :commands lsp
+    :custom
+    (lsp-enable-snippet 'f)
+    (lsp-auto-guess-root nil)
+    (lsp-prefer-flymake nil)
+    :hook ((python-mode) . lsp)
+     :config
+     (lsp-register-custom-settings '(("pyls.plugins.pyls_mypy.enabled" t t)))
+     (lsp-register-client
+      (make-lsp-client :new-connection (lsp-tramp-connection "~/anaconda3/bin/pyls")
+                       :major-modes '(python-mode)
+                       :remote? t
+                       :server-id 'pyls-remote)))
+
+  (use-package lsp-ui
+    :ensure t
+    :after (lsp-mode))
+
+  (use-package company-lsp
+    :ensure t
+    :after (lsp-mode)
+    :config
+    (setq company-lsp-enable-snippet t)
+    (push 'company-lsp company-backends))
+
+
+#+END_SRC
+* Tweaks
+** Landing page 
+#+begin_src emacs-lisp
+  ;;(org-agenda nil "w")
+;;  (delete-other-windows)
+#+end_src
+
+** Custom key bindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\C-w" 'backward-kill-word)
   (global-set-key "\C-x\C-k" 'kill-region)
-  (global-set-key "\C-c\C-k" 'kill-region)
   (global-set-key "\M-o" 'other-window)
   (global-set-key "\M-;" 'comment-dwim)
 #+END_SRC
 
-*** Show parens
+
+** Terminal
 #+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :ensure t
-    :config
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  (defvar term-shell "/bin/bash")
 #+END_SRC
 
-*** Spell checking
+** Utf-8
+#+BEGIN_SRC emacs-lisp
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+END_SRC    
+** Remove clutter
+Emacs truly comes with a lot of unnecessary stuff, and that stuff 
+has to go for more screen real estate.
+
+*** Remove all bars
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-no-scroll-bar)
+  (tool-bar-mode 0)
+  (menu-bar-mode 0)
+  (fringe-mode 1)
+;  (setq left-fringe-width 10)
+  (setq right-fringe-width 10)
+#+END_SRC
+
+** Stop Emacs backups
+Ok fine. It can make backup files, but at one location
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+#+END_SRC
+
+** Open links in Firefox
+Instead of default chrome.
+#+BEGIN_SRC emacs-lisp
+  (setq browse-url-browser-function 'browse-url-firefox
+        browse-url-new-window-flag  t
+        browse-url-firefox-new-window-is-tab t)
+#+END_SRC
+
+** Ignore bell
+Useful on Windows I guess.
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+
+
+** Spell checking
 #+BEGIN_SRC emacs-lisp
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (add-hook 'text-mode-hook 'flyspell-mode)
-                                          ;(add-hook 'latex-mode-hook 'flyspell-mode)
+  (add-hook 'latex-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'flyspell-mode)
 #+END_SRC
 
-*** Speedup tramp
+** Speedup tramp
 Having this on causes [[https://www.emacswiki.org/emacs/RecentFiles][issues]] with Tramp. Speedups from [[https://www.gnu.org/software/emacs/manual/html_node/tramp/Frequently-Asked-Questions.html][here]] and [[https://www.reddit.com/r/emacs/comments/320cvb/projectile_slows_tramp_mode_to_a_crawl_is_there_a/][here]].
 #+BEGIN_SRC emacs-lisp
-  (setq tramp-verbose 1)
-  (setq vc-handled-backends '(Git))
-  (setq recentf-auto-cleanup 'never)
-  (setq tramp-completion-reread-directory-timeout nil)
-  (defadvice projectile-project-root (around ignore-remote first activate)
-    (unless (file-remote-p default-directory) ad-do-it))
+    ;; supposed to ignore version control
+      (setq vc-ignore-dir-regexp
+            (format "\\(%s\\)\\|\\(%s\\)"
+                    vc-ignore-dir-regexp
+                    tramp-file-name-regexp))
+
+  
+      (setq tramp-verbose 1)
+      ; (setq vc-handled-backends '(Git))
+      (setq vc-handled-backends nil)
+      (setq recentf-auto-cleanup 'never)
+      (setq tramp-completion-reread-directory-timeout nil)
+
+      ;; disable auto saving
+      (add-to-list 'backup-directory-alist
+                   (cons tramp-file-name-regexp nil))
+
+    ;; (defadvice projectile-project-root (around ignore-remote first activate)
+    ;; (unless (file-remote-p default-directory) ad-do-it)) 
+  (setq tramp-ssh-controlmaster-options nil)
 #+END_SRC
+* Misc
+** Htmlize
+  Required by [[*Org export][ox-reveal]].
+  #+begin_src emacs-lisp
+  (use-package htmlize)
+  #+end_src
+
+
+  #+begin_src julia
+  print("hi")
+  #+end_src
